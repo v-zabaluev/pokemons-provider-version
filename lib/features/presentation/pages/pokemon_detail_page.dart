@@ -34,16 +34,31 @@ class PokemonDetailPage extends StatelessWidget {
                     children: [
                       Image.network(p.imageUrl, height: 200),
                       const SizedBox(height: 20),
-                      Text(p.name.toUpperCase(), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                      Text(
+                        p.name.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Text('ID: ${p.id}'),
                       Text('Рост: ${p.height}'),
                       Text('Вес: ${p.weight}'),
                       Text('По умолчанию: ${p.isDefault ? "Да" : "Нет"}'),
                       const SizedBox(height: 20),
-                      const Text('Способности', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'Способности',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 10),
-                      ...p.abilities.map((ability) => Text(ability, style: const TextStyle(fontSize: 16))),
+                      ...p.abilities.map(
+                        (ability) =>
+                            Text(ability, style: const TextStyle(fontSize: 16)),
+                      ),
                     ],
                   ),
                 ),

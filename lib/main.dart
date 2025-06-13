@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'app.dart';
 
+final appStartTime = DateTime.now();
+
 void main() {
-  runApp(const PokemonApp());
+  runApp(PokemonApp(startTime: appStartTime));
 }
+

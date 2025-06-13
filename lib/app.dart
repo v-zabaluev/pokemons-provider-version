@@ -7,7 +7,9 @@ import 'features/presentation/pages/pokemon_list_page.dart';
 import 'features/presentation/providers/pokemon_list_provider.dart';
 
 class PokemonApp extends StatelessWidget {
-  const PokemonApp({super.key});
+  final DateTime startTime;
+
+  const PokemonApp({super.key, required this.startTime});
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +17,13 @@ class PokemonApp extends StatelessWidget {
     final remoteDataSource = PokemonRemoteDataSource(dio);
     final repository = PokemonRepository(remoteDataSource);
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => PokemonListProvider(repository)..loadPokemonList()),
-      ],
-      child: const MaterialApp(
-        home: PokemonListPage(),
+    return MaterialApp(
+      home: PokemonListPageProvider(
+        repository: repository,
+        startTime: startTime,
       ),
     );
   }
 }
+
+

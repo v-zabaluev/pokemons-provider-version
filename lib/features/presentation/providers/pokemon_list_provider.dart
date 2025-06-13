@@ -2,30 +2,48 @@ import 'package:flutter/foundation.dart';
 import '../../data/repositories/pokemon_repository.dart';
 import '../../domain/entities/pokemon_entity.dart';
 
-class PokemonListProvider with ChangeNotifier {
+class PokemonListProvider extends ChangeNotifier {
   final PokemonRepository repository;
-
-  PokemonListProvider(this.repository);
-
-  List<PokemonEntity> _pokemonList = [];
-  String? _errorMessage;
+  List<PokemonEntity> _allPokemon = [];
+  List<PokemonEntity> _filteredPokemon = [];
   bool _isLoading = false;
+  String _error = '';
 
-  List<PokemonEntity> get pokemonList => _pokemonList;
-  String? get errorMessage => _errorMessage;
+  List<PokemonEntity> get pokemons => _filteredPokemon;
+
   bool get isLoading => _isLoading;
 
-  Future<void> loadPokemonList() async {
+  String get error => _error;
+
+  PokemonListProvider({required this.repository});
+
+  Future<void> fetchPokemonList() async {
+    final stopwatch = Stopwatch()..start();
     _isLoading = true;
+    _error = '';
     notifyListeners();
     try {
-      _pokemonList = await repository.getPokemonList();
-      _errorMessage = null;
+      _allPokemon = await repository.getPokemonList();
+      _filteredPokemon = _allPokemon;
     } catch (e) {
-      _errorMessage = 'Ошибка загрузки списка покемонов';
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      _error = 'Ошибка загрузки списка покемонов';
     }
+    _isLoading = false;
+    stopwatch.stop();
+    print('Время загрузки (Provider): ${stopwatch.elapsedMilliseconds} мс');
+    notifyListeners();
+  }
+
+  void search(String query) {
+    if (query.isEmpty) {
+      _filteredPokemon = _allPokemon;
+    } else {
+      final q = query.toLowerCase();
+      _filteredPokemon =
+          _allPokemon
+              .where((pokemon) => pokemon.name.toLowerCase().contains(q))
+              .toList();
+    }
+    notifyListeners();
   }
 }
